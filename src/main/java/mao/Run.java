@@ -24,9 +24,26 @@ public class Run
     public static void main(String[] args)
             throws MQBrokerException, RemotingException, InterruptedException, MQClientException
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 10; i++)
         {
-            OnewayProducer.main(null);
+            new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    try
+                    {
+                        for (int j = 0; j < 20; j++)
+                        {
+                            SyncProducer.main(null);
+                        }
+                    }
+                    catch (MQClientException | MQBrokerException | RemotingException | InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 }
